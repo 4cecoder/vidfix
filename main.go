@@ -19,5 +19,6 @@ func main() {
 			fmt.Fprintf(w, "Video URL not found in request")
 		}
 	})
+	fmt.Println("VidFix is running on localhost:9999/")
 	http.ListenAndServe(":9999", nil)
 }
