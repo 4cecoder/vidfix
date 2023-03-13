@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 func main() {
@@ -10,9 +11,13 @@ func main() {
 		videoUrl := r.URL.Query().Get("url")
 		if videoUrl != "" {
 			fmt.Printf("Playing video: %s\n", videoUrl)
-			html := fmt.Sprintf("<video src=\"%s\" controls autoplay></video>", videoUrl)
-			w.Header().Set("Content-Type", "text/html")
-			fmt.Fprint(w, html)
+			if strings.HasSuffix(videoUrl, ".m3u8") {
+				w.Header().Set("Content-Type", "application/vnd.apple.mpegurl")
+			} else {
+				fmt.Fprintf(w, "Unsupported video format")
+				return
+			}
+			fmt.Fprintf(w, "<video src=\"%s\" controls autoplay></video>", videoUrl)
 		} else {
 			fmt.Fprintf(w, "Video URL not found in request")
 		}
