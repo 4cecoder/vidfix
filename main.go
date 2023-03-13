@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"os/exec"
 )
 
 func main() {
@@ -11,12 +10,9 @@ func main() {
 		videoUrl := r.URL.Query().Get("url")
 		if videoUrl != "" {
 			fmt.Printf("Playing video: %s\n", videoUrl)
-			cmd := exec.Command("/usr/bin/mpv", videoUrl)
-			if err := cmd.Run(); err != nil {
-				fmt.Fprintf(w, "Error playing video: %s", err)
-			} else {
-				fmt.Fprintf(w, "Video played successfully")
-			}
+			html := fmt.Sprintf("<video src=\"%s\" controls autoplay></video>", videoUrl)
+			w.Header().Set("Content-Type", "text/html")
+			fmt.Fprint(w, html)
 		} else {
 			fmt.Fprintf(w, "Video URL not found in request")
 		}
