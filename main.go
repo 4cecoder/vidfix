@@ -11,7 +11,7 @@ func main() {
 		videoUrl := r.URL.Query().Get("url")
 		if videoUrl != "" {
 			fmt.Printf("Playing video: %s\n", videoUrl)
-			cmd := exec.Command("mpv", videoUrl)
+			cmd := exec.Command("/usr/bin/mpv", videoUrl)
 			if err := cmd.Run(); err != nil {
 				fmt.Fprintf(w, "Error playing video: %s", err)
 			} else {
