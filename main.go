@@ -12,12 +12,25 @@ func main() {
 		if videoUrl != "" {
 			fmt.Printf("Playing video: %s\n", videoUrl)
 			if strings.HasSuffix(videoUrl, ".m3u8") {
-				w.Header().Set("Content-Type", "application/vnd.apple.mpegurl")
+				w.Header().Set("Content-Type", "text/html")
+				fmt.Fprintf(w, `<!DOCTYPE html>
+                    <html>
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Video Player</title>
+                            <link href="https://vjs.zencdn.net/7.14.3/video-js.css" rel="stylesheet" />
+                            <script src="https://vjs.zencdn.net/7.14.3/video.js"></script>
+                        </head>
+                        <body>
+                            <video id="my-video" class="video-js vjs-default-skin" controls preload="auto" width="640" height="264"
+                                data-setup='{}'>
+                                <source src="%s" type="application/x-mpegURL">
+                            </video>
+                        </body>
+                    </html>`, videoUrl)
 			} else {
 				fmt.Fprintf(w, "Unsupported video format")
-				return
 			}
-			fmt.Fprintf(w, "<video src=\"%s\" controls autoplay></video>", videoUrl)
 		} else {
 			fmt.Fprintf(w, "Video URL not found in request")
 		}
